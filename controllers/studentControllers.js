@@ -1,5 +1,5 @@
 const StudentRegister = require("../Models/studentModel");
-
+const axios = require("axios");
 const Register = async (req, res, next) => {
   const { studentName, studentEmail, studentId, studentPassword } = req.body;
 
@@ -53,7 +53,6 @@ const updateStudents = async (req, res) => {
 const DeleteStudent = async (req, res) => {
   try {
     const studentId = req.params.id;
-
     const delStudent = await StudentRegister.findOne({ studentId });
     if (!delStudent) {
       res
@@ -64,10 +63,21 @@ const DeleteStudent = async (req, res) => {
     const result = await StudentRegister.deleteOne({ studentId });
     if (result.deletedCount === 1) {
       res.status(200).json({ message: "Student deleted successfully" });
-    } else {
-      res
-        .status(500)
-        .json({ error: "An error occurred while deleting the student" });
+      // let config = {
+      //   method: "delete",
+      //   maxBodyLength: Infinity,
+      //   url: `http://localhost:5000/studentProgress/${studentId}`,
+      //   headers: {},
+      // };
+
+      // axios
+      //   .request(config)
+      //   .then((response) => {
+      //     alert("The student progress is also deleted");
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
     }
   } catch (error) {
     console.log(error);

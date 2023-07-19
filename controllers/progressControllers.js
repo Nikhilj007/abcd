@@ -1,5 +1,4 @@
 const StudentProgress = require("../Models/progressModel");
-const axios = require("axios");
 
 const createWeekProgress = async (req, res) => {
   try {
@@ -121,5 +120,31 @@ const updateWeekProgress = async (req, res) => {
       .json({ error: "An error occurred while updating week data" });
   }
 };
+const deleteweekProgress = async (req, res) => {
+  try {
+    const studentId = req.params.id;
 
-module.exports = { createWeekProgress, ReadProgress, updateWeekProgress };
+    const delStudent = await StudentProgress.findOne({ studentId });
+    if (!delStudent) {
+      res
+        .status(404)
+        .json({ message: "Student ID not correct or student not found" });
+      return;
+    }
+    const result = await StudentProgress.deleteOne({ studentId });
+    if (result.deletedCount === 1) {
+      res.status(200).json({ message: "Student deleted successfully" });
+    }
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the student" });
+  }
+};
+module.exports = {
+  createWeekProgress,
+  ReadProgress,
+  updateWeekProgress,
+  deleteweekProgress,
+};
